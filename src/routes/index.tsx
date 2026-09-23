@@ -299,15 +299,16 @@ function QuizPage() {
     setTimeout(() => setModalOpen(true), 800);
   }, [answers, canSubmit, name, phone, utm]);
 
-  const progress = done ? 100 : ((stepIndex + (showInteraction ? 1 : 0.4)) / TOTAL_STEPS) * 100;
+  const stepNumber = Math.min(stepIndex + 1, TOTAL_STEPS);
+  const progress = (stepNumber / TOTAL_STEPS) * 100;
   const currentStep = STEPS[stepIndex];
   const isFormStep = stepIndex === TOTAL_STEPS - 1;
 
   return (
     <main className="flex min-h-screen justify-center bg-background md:items-center md:p-6">
-      <div className="flex h-[100dvh] w-full flex-col overflow-hidden bg-chat-surface shadow-xl md:h-[820px] md:max-h-[92vh] md:w-[440px] md:rounded-3xl md:border md:border-border">
+      <div className="flex h-[100dvh] w-full flex-col overflow-hidden bg-card shadow-xl md:h-[820px] md:max-h-[92vh] md:w-[440px] md:rounded-3xl md:border md:border-border">
         {/* Шапка */}
-        <header className="shrink-0 border-b border-border bg-card pt-[env(safe-area-inset-top)]">
+        <header className="shrink-0 bg-card pt-[env(safe-area-inset-top)]">
           <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-4 py-3">
             <ManagerAvatar size="lg" />
             <div className="min-w-0">
@@ -318,16 +319,21 @@ function QuizPage() {
               </p>
             </div>
           </div>
-          <div className="h-1 w-full bg-muted">
-            <div
-              className="h-full rounded-r-full bg-primary transition-all duration-700 ease-out"
-              style={{ width: `${Math.min(100, progress)}%` }}
-            />
+          <div className="border-t border-border px-4 pb-3 pt-2">
+            <p className="text-xs text-muted-foreground">
+              Шаг {stepNumber} из {TOTAL_STEPS}
+            </p>
+            <div className="mt-1.5 h-[3px] w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-quiz-cta transition-all duration-700 ease-out"
+                style={{ width: `${Math.min(100, progress)}%` }}
+              />
+            </div>
           </div>
         </header>
 
         {/* Тело чата */}
-        <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+        <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-chat-surface px-4 py-4">
           {chat.map((item) =>
             item.from === "manager" ? (
               <div key={item.id} className="animate-bubble-in flex items-end gap-2">
@@ -346,73 +352,6 @@ function QuizPage() {
           )}
 
           {typing && !done && <TypingBubble />}
-
-          {/* Варианты ответа */}
-          {showInteraction && !done && !isFormStep && currentStep && (
-            <div className="animate-bubble-in space-y-2 pt-1">
-              {currentStep.options.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => handleOption(option)}
-                  className="w-full min-h-11 rounded-xl border border-border bg-card px-4 py-3 text-left text-[15px] font-medium text-card-foreground shadow-sm transition-all hover:border-primary hover:bg-accent active:scale-[0.99]"
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Форма контактов */}
-          {showInteraction && !done && isFormStep && (
-            <div className="animate-bubble-in space-y-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Имя"
-                aria-label="Ваше имя"
-                maxLength={60}
-                className="w-full min-h-11 rounded-xl border border-input bg-background px-4 py-2.5 text-[15px] outline-none transition-colors focus:border-primary"
-              />
-              <div className="flex min-h-11 items-center gap-2 rounded-xl border border-input bg-background px-3 transition-colors focus-within:border-primary">
-                <span className="shrink-0 text-lg" aria-hidden="true">
-                  🇷🇺
-                </span>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(formatPhone(e.target.value))}
-                  onFocus={() => {
-                    if (!phone) setPhone("+7");
-                  }}
-                  placeholder="+7 (999) 000-00-00"
-                  aria-label="Номер телефона"
-                  className="min-w-0 flex-1 bg-transparent py-2.5 text-[15px] outline-none"
-                />
-              </div>
-              <label className="flex cursor-pointer gap-2.5 text-xs leading-relaxed text-muted-foreground">
-                <input
-                  type="checkbox"
-                  checked={agreed}
-                  onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
-                />
-                <span>
-                  Я согласен с Политикой конфиденциальности и Согласием на обработку персональных
-                  данных
-                </span>
-              </label>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!canSubmit}
-                className="w-full min-h-12 rounded-xl bg-foreground px-4 text-[15px] font-semibold text-background transition-all hover:opacity-90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Получить расчёт со скидкой →
-              </button>
-            </div>
-          )}
 
           {/* Финальный экран */}
           {done && (
@@ -440,6 +379,73 @@ function QuizPage() {
             </div>
           )}
         </div>
+
+        {/* Варианты ответа */}
+        {showInteraction && !done && !isFormStep && currentStep && (
+          <div className="animate-bubble-in shrink-0 space-y-2 bg-card px-4 py-3">
+            {currentStep.options.map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => handleOption(option)}
+                className="w-full min-h-11 rounded-xl border border-input bg-card px-4 py-3 text-left text-[15px] font-medium text-card-foreground shadow-sm transition-all hover:border-primary hover:bg-accent active:scale-[0.99]"
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Форма контактов */}
+        {showInteraction && !done && isFormStep && (
+          <div className="animate-bubble-in shrink-0 space-y-3 bg-card px-4 py-3">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Имя"
+              aria-label="Ваше имя"
+              maxLength={60}
+              className="w-full min-h-11 rounded-xl border border-input bg-card px-4 py-2.5 text-[15px] outline-none transition-colors focus:border-primary"
+            />
+            <div className="flex min-h-11 items-center gap-2 rounded-xl border border-input bg-card px-3 transition-colors focus-within:border-primary">
+              <span className="shrink-0 text-lg" aria-hidden="true">
+                🇷🇺
+              </span>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(formatPhone(e.target.value))}
+                onFocus={() => {
+                  if (!phone) setPhone("+7");
+                }}
+                placeholder="+7 (999) 000-00-00"
+                aria-label="Номер телефона"
+                className="min-w-0 flex-1 bg-transparent py-2.5 text-[15px] outline-none"
+              />
+            </div>
+            <label className="flex cursor-pointer gap-2.5 text-xs leading-relaxed text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+              />
+              <span>
+                Я согласен с Политикой конфиденциальности и Согласием на обработку персональных
+                данных
+              </span>
+            </label>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={!canSubmit}
+              className="w-full min-h-12 rounded-xl bg-quiz-cta px-4 text-[15px] font-semibold text-foreground transition-all hover:opacity-90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Получить расчёт со скидкой →
+            </button>
+          </div>
+        )}
 
         {/* Футер-дисклеймер */}
         <footer className="shrink-0 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-[11px] leading-relaxed text-muted-foreground">
