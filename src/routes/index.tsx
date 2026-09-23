@@ -299,15 +299,16 @@ function QuizPage() {
     setTimeout(() => setModalOpen(true), 800);
   }, [answers, canSubmit, name, phone, utm]);
 
-  const progress = done ? 100 : ((stepIndex + (showInteraction ? 1 : 0.4)) / TOTAL_STEPS) * 100;
+  const stepNumber = Math.min(stepIndex + 1, TOTAL_STEPS);
+  const progress = (stepNumber / TOTAL_STEPS) * 100;
   const currentStep = STEPS[stepIndex];
   const isFormStep = stepIndex === TOTAL_STEPS - 1;
 
   return (
     <main className="flex min-h-screen justify-center bg-background md:items-center md:p-6">
-      <div className="flex h-[100dvh] w-full flex-col overflow-hidden bg-chat-surface shadow-xl md:h-[820px] md:max-h-[92vh] md:w-[440px] md:rounded-3xl md:border md:border-border">
+      <div className="flex h-[100dvh] w-full flex-col overflow-hidden bg-card shadow-xl md:h-[820px] md:max-h-[92vh] md:w-[440px] md:rounded-3xl md:border md:border-border">
         {/* Шапка */}
-        <header className="shrink-0 border-b border-border bg-card pt-[env(safe-area-inset-top)]">
+        <header className="shrink-0 bg-card pt-[env(safe-area-inset-top)]">
           <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-4 py-3">
             <ManagerAvatar size="lg" />
             <div className="min-w-0">
@@ -318,11 +319,16 @@ function QuizPage() {
               </p>
             </div>
           </div>
-          <div className="h-1 w-full bg-muted">
-            <div
-              className="h-full rounded-r-full bg-primary transition-all duration-700 ease-out"
-              style={{ width: `${Math.min(100, progress)}%` }}
-            />
+          <div className="border-t border-border px-4 pb-3 pt-2">
+            <p className="text-xs text-muted-foreground">
+              Шаг {stepNumber} из {TOTAL_STEPS}
+            </p>
+            <div className="mt-1.5 h-[3px] w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-quiz-cta transition-all duration-700 ease-out"
+                style={{ width: `${Math.min(100, progress)}%` }}
+              />
+            </div>
           </div>
         </header>
 
