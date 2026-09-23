@@ -296,7 +296,7 @@ function QuizPage() {
     setSubmittedPhone(phone);
     setShowInteraction(false);
     setDone(true);
-    setTimeout(() => setModalOpen(true), 800);
+    setTimeout(() => setModalOpen(true), 3000);
   }, [answers, canSubmit, name, phone, utm]);
 
   const stepNumber = Math.min(stepIndex + 1, TOTAL_STEPS);
