@@ -448,8 +448,8 @@ function QuizPage() {
         )}
 
         {/* Футер-дисклеймер */}
-        <footer className="shrink-0 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-[11px] leading-relaxed text-muted-foreground">
-          <span className="inline-flex flex-nowrap items-center justify-center gap-2 whitespace-nowrap">
+        <footer className="shrink-0 overflow-hidden border-t border-border bg-card px-2 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-[10px] leading-relaxed text-muted-foreground md:px-4 md:text-[11px]">
+          <span className="inline-flex flex-nowrap items-center justify-center gap-1.5 whitespace-nowrap">
             <span className="whitespace-nowrap">Политика конфиденциальности</span>
             <span aria-hidden="true" className="text-border">
               |
