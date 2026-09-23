@@ -344,7 +344,7 @@ function QuizPage() {
               </div>
             ) : (
               <div key={item.id} className="animate-bubble-in flex justify-end">
-                <div className="max-w-[80%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-[15px] leading-snug text-primary-foreground shadow-sm">
+                <div className="max-w-[80%] rounded-2xl rounded-br-md bg-chat-user-bubble px-4 py-2.5 text-[15px] leading-snug text-chat-bubble-foreground shadow-sm">
                   {item.text}
                 </div>
               </div>
@@ -448,8 +448,14 @@ function QuizPage() {
         )}
 
         {/* Футер-дисклеймер */}
-        <footer className="shrink-0 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-[11px] leading-relaxed text-muted-foreground">
-          Политика конфиденциальности · Согласие на обработку персональных данных
+        <footer className="shrink-0 overflow-hidden border-t border-border bg-card px-2 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-[10px] leading-relaxed text-muted-foreground md:px-4 md:text-[11px]">
+          <span className="inline-flex flex-nowrap items-center justify-center gap-1 whitespace-nowrap tracking-tight md:gap-1.5 md:tracking-normal">
+            <span className="whitespace-nowrap">Политика конфиденциальности</span>
+            <span aria-hidden="true" className="text-border">
+              |
+            </span>
+            <span className="whitespace-nowrap">Согласие на обработку персональных данных</span>
+          </span>
         </footer>
       </div>
 
