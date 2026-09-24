@@ -175,6 +175,7 @@ function QuizPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [submittedPhone, setSubmittedPhone] = useState("");
@@ -266,7 +267,8 @@ function QuizPage() {
   const canSubmit = name.trim().length > 0 && phoneComplete(phone) && agreed;
 
   const handleSubmit = useCallback(async () => {
-    if (!canSubmit) return;
+    if (isSubmitting || !canSubmit) return;
+    setIsSubmitting(true);
     const payload = {
       timestamp: new Date().toISOString(),
       answer_1: answers[0] ?? "",
@@ -289,6 +291,8 @@ function QuizPage() {
         });
       } catch (error) {
         console.error("Ошибка отправки заявки", error);
+        setIsSubmitting(false);
+        return;
       }
     } else {
       console.log("Данные заявки (URL Apps Script не задан):", payload);
@@ -298,7 +302,7 @@ function QuizPage() {
     setShowInteraction(false);
     setDone(true);
     setTimeout(() => setModalOpen(true), 3000);
-  }, [answers, canSubmit, name, phone, utm]);
+  }, [answers, canSubmit, isSubmitting, name, phone, utm]);
 
   const stepNumber = Math.min(stepIndex + 1, TOTAL_STEPS);
   const progress = (stepNumber / TOTAL_STEPS) * 100;
@@ -440,10 +444,20 @@ function QuizPage() {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={!canSubmit}
+              disabled={!canSubmit || isSubmitting}
               className="w-full min-h-12 rounded-xl bg-quiz-cta px-4 text-[15px] font-semibold text-foreground transition-all hover:opacity-90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Получить расчёт со скидкой →
+              {isSubmitting ? (
+                <span className="inline-flex items-center justify-center gap-2">
+                  <span
+                    className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                    aria-hidden="true"
+                  />
+                  Отправляем…
+                </span>
+              ) : (
+                "Получить расчёт со скидкой →"
+              )}
             </button>
           </div>
         )}
