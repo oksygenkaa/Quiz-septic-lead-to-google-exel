@@ -31,7 +31,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * ---------------------------------------------------------------------------
  */
 
-const GOOGLE_SCRIPT_URL = "ВСТАВЬТЕ_СЮДА_URL_ВАШЕГО_APPS_SCRIPT";
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzkaF68b8U7cN72BqXBDfNiYlJA5GD7gff2Tre9zUPDt8zxQIn2xHcuRVuKmHeOO_J-RQ/exec";
 const CALL_MARKING = "IP Nikitina IV: stroit-vo";
 
 const UTM_KEYS = [
