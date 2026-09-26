@@ -33,6 +33,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const GOOGLE_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbyG2bYMAt1GzbWUQzzCHeUhUkz3do7S0jIXCv65nZ3XpchtiZMVi3t5pIJYo_6ZJCy3PA/exec";
+const ALBATO_WEBHOOK_URL =
+  "https://h.albato.ru/wh/38/1lf3h31/plC64RjXnhRPF4zyiWcvjAUtBM2QbzNeHit8nAgCxdc/";
 const CALL_MARKING = "IP Nikitina IV: stroit-vo";
 
 const UTM_KEYS = [
@@ -296,6 +298,19 @@ function QuizPage() {
       }
     } else {
       console.log("Данные заявки (URL Apps Script не задан):", payload);
+    }
+
+    if (ALBATO_WEBHOOK_URL.startsWith("http")) {
+      try {
+        await fetch(ALBATO_WEBHOOK_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(payload).toString(),
+        });
+      } catch (error) {
+        console.error("Ошибка отправки в Albato", error);
+      }
     }
 
     setSubmittedPhone(phone);
