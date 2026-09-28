@@ -146,7 +146,7 @@ function ManagerAvatar({ size = "sm" }: { size?: "sm" | "lg" }) {
       }`}
       aria-hidden="true"
     >
-      M
+      С
     </div>
   );
 }
