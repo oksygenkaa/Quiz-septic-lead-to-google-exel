@@ -64,7 +64,7 @@ type Step = {
 const STEPS: Step[] = [
   {
     messages: [
-      "Здравствуйте! Я Максим, менеджер компании «Свежий ветер».",
+      "Здравствуйте! Я Степан, менеджер компании «Свежий ветер».",
       "Подберём оптимальный септик под ваш дом и бюджет — а не тот, что выгоднее продать. Цены от производителя — от 55 000 рублей. Гарантия до 50 лет и оплата по факту.",
       "Ответьте на 3 коротких вопроса — подготовлю расчёт для вас.",
       "1. Сколько человек проживает или будет проживать в доме?",
@@ -146,7 +146,7 @@ function ManagerAvatar({ size = "sm" }: { size?: "sm" | "lg" }) {
       }`}
       aria-hidden="true"
     >
-      M
+      С
     </div>
   );
 }
@@ -332,7 +332,7 @@ function QuizPage() {
           <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-4 py-3">
             <ManagerAvatar size="lg" />
             <div className="min-w-0">
-              <p className="truncate font-semibold text-card-foreground">Менеджер Максим</p>
+              <p className="truncate font-semibold text-card-foreground">Менеджер Степан</p>
               <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 {!done && <span className="h-1.5 w-1.5 rounded-full bg-success" />}
                 {done ? "Готово!" : "Онлайн"}
